@@ -22,7 +22,9 @@
 #include <dennix/conf.h>
 #include <dennix/kernel/syscall.h>
 
-#define SYSNAME "Dennix"
+#ifndef DENNIX_SYSNAME
+#  define DENNIX_SYSNAME "Dennix"
+#endif
 #ifndef DENNIX_VERSION
 #  define DENNIX_VERSION "unknown"
 #endif
@@ -36,7 +38,7 @@
 
 static const char* getConfstr(int name) {
     switch (name) {
-    case _CS_UNAME_SYSNAME: return SYSNAME;
+    case _CS_UNAME_SYSNAME: return DENNIX_SYSNAME;
     case _CS_UNAME_RELEASE: return DENNIX_VERSION;
     case _CS_UNAME_VERSION: return __DATE__;
     case _CS_UNAME_MACHINE: return MACHINE;

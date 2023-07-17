@@ -26,7 +26,7 @@ CXXFLAGS ?= -O2 -g
 CXXFLAGS += --sysroot=$(SYSROOT) -std=gnu++14 -ffreestanding -fno-exceptions
 CXXFLAGS += -fno-rtti -fcheck-new -nostdinc++ -fstack-protector-strong
 CXXFLAGS += -Wall -Wextra -Wno-missing-field-initializers
-CPPFLAGS += -I include -DDENNIX_VERSION=\"$(VERSION)\"
+CPPFLAGS += -I include -DDENNIX_VERSION=\"$(VERSION)\" -DDENNIX_SYSNAME=\"$(SYSNAME)\"
 CPPFLAGS += -D__is_dennix_kernel -D_DENNIX_SOURCE
 LDFLAGS += --sysroot=$(SYSROOT) -T $(LDSCRIPT) -ffreestanding -nostdlib
 LIBS += -lk -lgcc

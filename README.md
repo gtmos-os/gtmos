@@ -1,8 +1,11 @@
-# Dennix
+# GTMOS
 
-Dennix is a unix-like hobbyist operating system for x86 and x86_64 that has
-been in development by a single developer since 2016. Exciting features
-include:
+GTMOS is a fork of [Dennix](https://github.com/dennis95/dennix/)
+and hopes to brings more features to Denix but try to be different.
+at the same time.
+Denix is a unix-like hobbyist operating system for x86 and x86_64 
+that has been in development by a single developer since 2016. 
+Exciting features include:
 
 - A monolithic kernel written in C++
 - A standard C library that is sufficiently complete to allow running most
@@ -16,7 +19,7 @@ include:
 
 ## Building
 
-To build Dennix you will first need to install a cross toolchain for Dennix.
+To build GTMOS you will first need to install a cross toolchain for GTMOS.
 The command `make install-toolchain` will download, build and install the
 toolchain. The installation script can be configured using environment
 variables. You can use the command `./build-aux/install-toolchain.sh --help`
