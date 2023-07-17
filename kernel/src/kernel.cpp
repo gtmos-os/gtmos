@@ -37,6 +37,9 @@
 #include <dennix/kernel/rtc.h>
 #include <dennix/kernel/worker.h>
 
+#ifndef DENNIX_SYSNAME
+#  define DENNIX_SYSNAME "Dennix"
+#endif
 #ifndef DENNIX_VERSION
 #  define DENNIX_VERSION ""
 #endif
@@ -67,7 +70,7 @@ extern "C" void kmain(uint32_t /*magic*/, paddr_t multibootAddress) {
     PhysicalMemory::initialize(multiboot);
 
     Log::initialize();
-    Log::printf("Welcome to Dennix " DENNIX_VERSION "\n");
+    Log::printf("Welcome to " DENNIX_SYSNAME " " DENNIX_VERSION "\n");
     Interrupts::initPic();
     Acpi::initialize(multiboot);
 

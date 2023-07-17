@@ -38,5 +38,5 @@ jobs:
       - name: Upload iso image
         uses: actions/upload-artifact@v3
         with:
-          name: dennix-${{ matrix.arch }}
-          path: dennix.iso
+          name: gtmos-${{ matrix.arch }}
+          path: gtmos.iso

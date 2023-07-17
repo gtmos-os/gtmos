@@ -23,7 +23,7 @@ COMPRESS = xz $(subst -j,-T,$(JOBS))
 
 KERNEL = $(BUILD_DIR)/kernel/kernel
 INITRD = $(BUILD_DIR)/initrd.tar.xz
-ISO = dennix.iso
+ISO = gtmos.iso
 LICENSE = $(LICENSES_DIR)/dennix/LICENSE
 DXPORT = ./ports/dxport --host=$(ARCH)-dennix --builddir=$(BUILD_DIR)/ports
 DXPORT += --sysroot=$(SYSROOT)
