@@ -42,6 +42,7 @@ static dxui_rect chooseWindowRect(int x, int y, int width, int height);
 static dxui_rect getCloseButtonRect(struct Window* window);
 static void removeWindow(struct Window* window);
 static dxui_color renderCloseButton(int x, int y);
+static dxui_color renderWindowBorder(struct Window* window, int x, int y);
 
 static void addWindowOnTop(struct Window* window) {
     bool relativeMouse = false;
@@ -263,26 +264,38 @@ static dxui_color renderCloseButton(int x, int y) {
     }
 }
 
+static dxui_color renderWindowBorder(struct Window* window, int x, int y) {
+    int outBorderOffset = (window->rect.width - 1);
+    int inBorderOffsetX = ((window->rect.width - 1) - windowBorderSize);
+    int inBorderOffsetY = ((window->rect.height) - windowBorderSize);
+
+    if (x == outBorderOffset || x == 0) {
+        return COLOR_BLACK;
+    } else {
+        if (y == window->rect.height - 1 || y == 0) {
+            return COLOR_BLACK;
+        } else {
+            if ((x >= windowBorderSize && x == inBorderOffsetX + 1) || (x == windowBorderSize - 1) ) {
+                if (y >= (windowBorderSize)  && y <= inBorderOffsetY - 1) {
+                    return COLOR_BLACK;
+                } else {
+                    return windowDecorationColor;
+                }
+            // } else if (y == inBorderOffsetY || y == windowBorderSize) {
+            //     return COLOR_BLACK;
+            } else {
+                return windowDecorationColor;
+            }
+        }
+    }
+}
+
 dxui_color renderWindowDecoration(struct Window* window, int x, int y) {
     int titleBegin = (window->rect.width - window->titleDim.width) / 2;
 
     if (y < windowBorderSize ||
             y >= windowTitleBarSize) {
-        if (x == window->rect.width - 1 || x == 0) {
-            if (y == window->rect.height - 1 || y == 0) {
-                return COLOR_BLACK;
-            } else {
-                return windowDecorationColor;
-            }
-        } else {
-            return windowDecorationColor;
-        }
-    } else if (x == window->rect.width - 1 || x == 0) {
-        if (y == window->rect.height - 1 || y == 0) {
-            return COLOR_BLACK;
-        } else {
-            return windowDecorationColor;
-        }
+        return renderWindowBorder(window, x, y);
     } else if (x >= window->rect.width - (windowBorderSize +
             windowCloseButtonSize) && x < window->rect.width -
             windowBorderSize) {
@@ -291,18 +304,14 @@ dxui_color renderWindowDecoration(struct Window* window, int x, int y) {
     } else if (x < titleBegin ||
             x >= titleBegin + window->titleDim.width) {
         if (x >= windowBorderSize &&
-            x < window->rect.width - windowBorderSize) {
+            x < window->rect.width - windowBorderSize - 1) {
             return titleBarColor;
         } else {
-            if (x == window->rect.width - 1 || x == 0) {
-                return COLOR_BLACK;
-            } else {
-                return windowDecorationColor;
-            }
+            return renderWindowBorder(window, x, y);
         }
     } else {
         x -= titleBegin;
-        y -= windowBorderSize + 1;
+        y -= windowBorderSize - (windowBorderSize / 2);
         dxui_color color = window->titleLfb[y * window->titleDim.width + x];
         if (!color) return titleBarColor;
         return color;
@@ -341,7 +350,7 @@ void setWindowCursor(struct Window* window, int cursor) {
 
 void setWindowTitle(struct Window* window, const char* title) {
     free(window->titleLfb);
-    dxui_rect rect = {{0, 0, 0, 0}};
+    dxui_rect rect = {{0, windowBorderSize, 0, 0}};
     rect = dxui_get_text_rect(title, rect, 0);
     window->titleLfb = calloc(rect.width * rect.height, sizeof(dxui_color));
     if (!window->titleLfb) dxui_panic(context, "malloc");
