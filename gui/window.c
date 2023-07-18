@@ -25,7 +25,7 @@
 
 static const int windowBorderSize = 4;
 static const int windowCloseButtonSize = 18;
-static const int windowTitleBarSize = 19 + 2 * windowBorderSize;
+static const int windowTitleBarSize = 19 + windowBorderSize;
 
 static const dxui_color closeButtonColor = RGB(192, 192, 192);
 static const dxui_color closeCrossColor = COLOR_BLACK;
@@ -275,14 +275,12 @@ static dxui_color renderWindowBorder(struct Window* window, int x, int y) {
         if (y == window->rect.height - 1 || y == 0) {
             return COLOR_BLACK;
         } else {
-            if ((x >= windowBorderSize && x == inBorderOffsetX + 1) || (x == windowBorderSize - 1) ) {
-                if (y >= (windowBorderSize)  && y <= inBorderOffsetY - 1) {
+            if (x >= (windowBorderSize - 1 ) && x <= inBorderOffsetX + 1) {
+                if (y >= (windowBorderSize - 1)  && y <= inBorderOffsetY) {
                     return COLOR_BLACK;
                 } else {
                     return windowDecorationColor;
                 }
-            // } else if (y == inBorderOffsetY || y == windowBorderSize) {
-            //     return COLOR_BLACK;
             } else {
                 return windowDecorationColor;
             }
