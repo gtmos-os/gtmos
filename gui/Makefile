@@ -23,7 +23,7 @@ BUILD = $(BUILD_DIR)/gui
 
 CFLAGS ?= -O2 -g
 CFLAGS += --sysroot=$(SYSROOT) -fstack-protector-strong -Wall -Wextra
-CPPFLAGS += -D_DENNIX_SOURCE -DDENNIX_VERSION=\"$(VERSION)\"
+CPPFLAGS += -D_DENNIX_SOURCE -DDENNIX_VERSION=\"$(VERSION)\" -DDENNIX_SYSNAME=\"$(SYSNAME)\"
 LIBS = -ldxui
 
 OBJ = \

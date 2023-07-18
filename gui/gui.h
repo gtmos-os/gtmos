@@ -27,7 +27,7 @@ extern dxui_window* compositorWindow;
 extern dxui_color* lfb;
 extern dxui_dim guiDim;
 
-static const dxui_color backgroundColor = RGB(0, 200, 255);
+static const dxui_color backgroundColor = RGB(0, 128, 128);
 
 void addDamageRect(dxui_rect rect);
 void broadcastStatusEvent(void);

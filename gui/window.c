@@ -24,13 +24,14 @@
 #include "window.h"
 
 static const int windowBorderSize = 4;
-static const int windowCloseButtonSize = 16;
-static const int windowTitleBarSize = 16 + 2 * windowBorderSize;
+static const int windowCloseButtonSize = 18;
+static const int windowTitleBarSize = 19 + 2 * windowBorderSize;
 
-static const dxui_color closeButtonColor = COLOR_RED;
-static const dxui_color closeCrossColor = COLOR_WHITE;
-static const dxui_color titleColor = COLOR_BLACK;
-static const dxui_color windowDecorationColor = RGBA(64, 64, 180, 200);
+static const dxui_color closeButtonColor = RGB(192, 192, 192);
+static const dxui_color closeCrossColor = COLOR_BLACK;
+static const dxui_color titleColor = COLOR_WHITE;
+static const dxui_color titleBarColor = RGB(0, 0, 128);
+static const dxui_color windowDecorationColor = RGB(192, 192, 192);
 
 struct Window* changingWindow;
 struct Window* mouseWindow;
@@ -266,23 +267,45 @@ dxui_color renderWindowDecoration(struct Window* window, int x, int y) {
     int titleBegin = (window->rect.width - window->titleDim.width) / 2;
 
     if (y < windowBorderSize ||
-            y >= windowBorderSize + window->titleDim.height) {
-        return windowDecorationColor;
+            y >= windowTitleBarSize) {
+        if (x == window->rect.width - 1 || x == 0) {
+            if (y == window->rect.height - 1 || y == 0) {
+                return COLOR_BLACK;
+            } else {
+                return windowDecorationColor;
+            }
+        } else {
+            return windowDecorationColor;
+        }
+    } else if (x == window->rect.width - 1 || x == 0) {
+        if (y == window->rect.height - 1 || y == 0) {
+            return COLOR_BLACK;
+        } else {
+            return windowDecorationColor;
+        }
     } else if (x >= window->rect.width - (windowBorderSize +
             windowCloseButtonSize) && x < window->rect.width -
             windowBorderSize) {
         return renderCloseButton(x - window->rect.width + windowBorderSize +
-                windowCloseButtonSize, y - windowBorderSize);
+            windowCloseButtonSize, y - windowBorderSize);
     } else if (x < titleBegin ||
             x >= titleBegin + window->titleDim.width) {
-        return windowDecorationColor;
+        if (x >= windowBorderSize &&
+            x < window->rect.width - windowBorderSize) {
+            return titleBarColor;
+        } else {
+            if (x == window->rect.width - 1 || x == 0) {
+                return COLOR_BLACK;
+            } else {
+                return windowDecorationColor;
+            }
+        }
     } else {
         x -= titleBegin;
-        y -= windowBorderSize;
+        y -= windowBorderSize + 1;
         dxui_color color = window->titleLfb[y * window->titleDim.width + x];
-        if (!color) return windowDecorationColor;
+        if (!color) return titleBarColor;
         return color;
-
     }
 }
 
