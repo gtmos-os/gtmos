@@ -6,6 +6,7 @@ use embedded_graphics::{
     Pixel,
 };
 
+
 pub struct Display {
     framebuffer: &'static mut [u8],
     info: FrameBufferInfo,
@@ -57,6 +58,10 @@ impl Display {
         };
 
         (first, second)
+    }
+
+    pub fn info(&mut self) -> FrameBufferInfo {
+        self.info
     }
 }
 

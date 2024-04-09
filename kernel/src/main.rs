@@ -1,50 +1,76 @@
 #![no_std]
 #![no_main]
+#![feature(abi_x86_interrupt)]
+#![feature(const_mut_refs)]
 
-use core::{convert::Infallible, panic::PanicInfo};
-
-use bootloader_api::BootInfo;
-use embedded_graphics::{
-    draw_target::DrawTarget,
-    geometry::Point,
-    mono_font::{ascii::FONT_10X20, MonoTextStyle},
-    pixelcolor::{Rgb888, RgbColor},
-    primitives::{Circle, PrimitiveStyle, StyledDrawable},
-    text::Text,
-    Drawable,
-};
-
+mod serial;
+mod arch;
+mod task;
 mod framebuffer;
 
-bootloader_api::entry_point!(kernel_main);
+use core::panic::PanicInfo;
+use core::fmt::Write;
+
+extern crate alloc;
+
+use arch::x86_64_impl::task::executor::Executor;
+use embedded_term::Console;
+use framebuffer::Display;
+use crate::{arch::x86_64_impl::{self, task::Task}, task::keyboard};
+
+use bootloader_api::{entry_point, BootInfo};
+use bootloader_api::config::{BootloaderConfig, Mapping};
+
+use embedded_graphics::{
+    draw_target::DrawTarget,
+    pixelcolor::{Rgb888, RgbColor},
+};
+
+pub static BOOTLOADER_CONFIG: BootloaderConfig = {
+    let mut config = BootloaderConfig::new_default();
+    config.mappings.physical_memory = Some(Mapping::Dynamic);
+    config
+};
+
+entry_point!(kernel_main, config = &BOOTLOADER_CONFIG);
 
 fn kernel_main(boot_info: &'static mut BootInfo) -> ! {
-    if let Some(framebuffer) = boot_info.framebuffer.as_mut() {
-        let height = framebuffer.info().height;
-        let display = framebuffer::Display::new(framebuffer);
-        let (mut upper, mut lower) = display.split_at_line(height / 2);
+    serial_println!("Welcome to GT MOS!");
+    use arch::x86_64_impl::allocator;
+    use arch::x86_64_impl::memory::{self, BootInfoFrameAllocator};
+    use x86_64::VirtAddr;
 
-        upper.clear(Rgb888::RED).unwrap_or_else(infallible);
-        lower.clear(Rgb888::BLUE).unwrap_or_else(infallible);
+    x86_64_impl::init();
 
-        let style = PrimitiveStyle::with_fill(Rgb888::YELLOW);
-        Circle::new(Point::new(50, 50), 300)
-            .draw_styled(&style, &mut upper)
-            .unwrap_or_else(infallible);
+    if let Some(physical_memory_offset) = boot_info.physical_memory_offset.as_mut() {
+        let phys_mem_offset = VirtAddr::new(*physical_memory_offset);
+        let mut mapper = unsafe { memory::init(phys_mem_offset) };
+        let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_regions) };
+        allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 
-        let character_style = MonoTextStyle::new(&FONT_10X20, Rgb888::BLUE);
-        let text = Text::new("Hello, world!", Point::new(140, 210), character_style);
-        text.draw(&mut upper).unwrap_or_else(infallible);
+        let mut executor = Executor::new();
+
+        if let Some(framebuffer) = boot_info.framebuffer.as_mut() {
+            let mut display = framebuffer::Display::new(framebuffer);
+            display.clear(Rgb888::BLACK).ok();
+            executor.spawn(Task::new(display_task(display)));
+        }
+
+        executor.spawn(Task::new(keyboard::print_keypresses()));
+        executor.run();
     }
-    loop {}
+    serial_println!("Kernel Finished - why? ...");
+    x86_64_impl::hlt_loop();
 }
 
 /// This function is called on panic.
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {}
+fn panic(info: &PanicInfo) -> ! {
+    serial_println!("{}", info);
+    x86_64_impl::hlt_loop();
 }
 
-fn infallible<T>(v: Infallible) -> T {
-    match v {}
+async fn display_task(display: Display) {
+    let mut console = Console::on_frame_buffer(display);
+    console.write_str("Hello World!").ok();
 }
