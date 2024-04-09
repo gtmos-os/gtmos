@@ -1,6 +1,4 @@
 extern crate alloc;
-use core::panic::PanicInfo;
-use crate::{serial_print, serial_println};
 
 pub mod allocator;
 pub mod gdt;
