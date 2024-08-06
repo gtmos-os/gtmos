@@ -1,8 +1,7 @@
 [package]
-name = "gt_mos"
-version = "0.1.0"
+name = "gtmos"
+version = "0.1.1"
 edition = "2021"
-default-run = "gt_mos"
 
 [workspace]
 members = ["kernel"]

@@ -1,6 +1,6 @@
 [package]
 name = "kernel"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [[bin]]
@@ -9,31 +9,4 @@ test = false
 bench = false
 
 [dependencies]
-bootloader_api = {version = "0.11.7"}
-embedded-graphics = "0.8.1"
-embedded-term = {git = "https://github.com/gtmos-os/embedded-term", version = "0.1.2"}
-volatile = "0.5.2"
-spin = "0.9.8"
-x86_64 = "0.15.1"
-uart_16550 = "0.3.0"
-pic8259 = "0.11.0"
-pc-keyboard = "0.7.0"
-linked_list_allocator = "0.10.5"
-
-[dependencies.lazy_static]
-version = "1.0"
-features = ["spin_no_std"]
-
-[dependencies.crossbeam-queue]
-version = "0.3.11"
-default-features = false
-features = ["alloc"]
-
-[dependencies.conquer-once]
-version = "0.4.0"
-default-features = false
-
-[dependencies.futures-util]
-version = "0.3.4"
-default-features = false
-features = ["alloc"]
+bootloader_api = "0.11.0"

@@ -8,8 +8,8 @@ fn main() {
 
     // specify output paths
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
-    let uefi_path = out_dir.join("gt_mos-uefi.img");
-    let bios_path = out_dir.join("gt_mos-bios.img");
+    let uefi_path = out_dir.join("gtmos-uefi.img");
+    let bios_path = out_dir.join("gtmos-bios.img");
 
     // create the disk images
     disk_builder.create_uefi_image(&uefi_path).unwrap();
