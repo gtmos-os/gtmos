@@ -56,6 +56,7 @@ override KCPPFLAGS := \
     -I src \
     $(KCPPFLAGS) \
     -I libc \
+    -I libk \
     -I flanterm \
     -I flanterm/backends \
     -MMD \
@@ -173,6 +174,7 @@ override KLDFLAGS += \
 
 # Collect all source files.
 override LIBC_CFILES := $(shell find libc -type f -name '*.c' | LC_ALL=C sort)
+override LIBK_CFILES := $(shell find libk -type f -name '*.c' | LC_ALL=C sort)
 override CFILES := $(shell find src flanterm -type f -name '*.c' | LC_ALL=C sort)
 override CXXFILES := $(shell find src flanterm -type f -name '*.cpp' | LC_ALL=C sort)
 override ASFILES := $(shell find src flanterm -type f -name '*.S' | LC_ALL=C sort)
@@ -182,11 +184,12 @@ endif
 
 # Create object files paths with correct directory structure.
 override LIBC_OBJ := $(addprefix obj-$(KARCH)/,$(LIBC_CFILES:.c=.c.o))
+override LIBK_OBJ := $(addprefix obj-$(KARCH)/,$(LIBK_CFILES:.c=.c.o))
 override OBJ := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.o) $(CXXFILES:.cpp=.cpp.o) $(ASFILES:.S=.S.o))
 ifeq ($(KARCH),x86_64)
 override OBJ += $(addprefix obj-$(KARCH)/,$(NASMFILES:.asm=.asm.o))
 endif
-override HEADER_DEPS := $(addprefix obj-$(KARCH)/,$(LIBC_CFILES:.c=.c.d) $(CFILES:.c=.c.d) $(CXXFILES:.cpp:.cpp.d) $(ASFILES:.S=.S.d))
+override HEADER_DEPS := $(addprefix obj-$(KARCH)/,$(LIBK_CFILES:.c=.c.d) $(LIBC_CFILES:.c=.c.d) $(CFILES:.c=.c.d) $(CXXFILES:.cpp:.cpp.d) $(ASFILES:.S=.S.d))
 
 # Ensure the dependencies have been obtained.
 override MISSING_DEPS := $(shell if ! test -d flanterm || ! test -f src/cc-runtime.c || ! test -f src/limine.h; then echo 1; fi)
@@ -199,9 +202,9 @@ endif
 all: bin-$(KARCH)/$(OUTPUT)
 
 # Link rules for the final executable.
-bin-$(KARCH)/$(OUTPUT): GNUmakefile linker-$(KARCH).ld $(LIBC_OBJ) $(OBJ)
+bin-$(KARCH)/$(OUTPUT): GNUmakefile linker-$(KARCH).ld $(LIBC_OBJ) $(LIBK_OBJ) $(OBJ)
 	mkdir -p "$$(dirname $@)"
-	$(KLD) $(LIBC_OBJ) $(OBJ) $(KLDFLAGS) -o $@
+	$(KLD) $(LIBC_OBJ) $(LIBK_OBJ) $(OBJ) $(KLDFLAGS) -o $@
 
 # Include header dependencies.
 -include $(HEADER_DEPS)

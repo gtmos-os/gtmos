@@ -1,4 +1,5 @@
 #include "./vfs.hpp"
+#include <gtmos/io.h>
 
 struct flanterm_context *ft_ctx = nullptr;
 
@@ -27,12 +28,8 @@ int VFS_Write(fd_t file, const char data, size_t size)
         flanterm_write(ft_ctx, &data, size);
         return size;
 
-    case VFS_FD_DEBUG: // \/ Placeholder implementation for this ...
-        if (ft_ctx == nullptr)
-        {
-            return -1; // Return an error if ft_ctx is not set
-        }
-        flanterm_write(ft_ctx, &data, size);
+    case VFS_FD_DEBUG:
+        serial_port_write_byte((uint8_t) data);
         return size;
 
     default:

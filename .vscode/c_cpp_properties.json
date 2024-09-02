@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/kernel/libc"
+                "${workspaceFolder}/kernel/libc",
+                "${workspaceFolder}/kernel/libk"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
