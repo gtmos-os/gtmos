@@ -7,6 +7,11 @@ void VFS_SetDisplayContext(struct flanterm_context *ft_ctx_in)
     ft_ctx = ft_ctx_in;
 }
 
+struct flanterm_context *VFS_GetDisplayContext()
+{
+    return ft_ctx;
+}
+
 int VFS_Write(fd_t file, const char data, size_t size)
 {
     switch (file)

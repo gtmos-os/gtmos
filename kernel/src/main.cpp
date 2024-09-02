@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <stddef.h>
 #include <stdio.h>
+#include <gtmos/hal/panic.h>
 #include "./limine.h"
 #include "./libc/vfs.hpp"
 
@@ -191,6 +192,8 @@ extern "C" void kmain()
     int A = 1;
 
     printf(msg, A);
+
+    panic("TEST!");
 
     // We're done, just hang...
     hcf();
