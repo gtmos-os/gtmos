@@ -20,6 +20,10 @@
 #define __FSTD_HDRS_LIMITS_H 1
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #undef CHAR_BIT
 #define CHAR_BIT __CHAR_BIT__
 
@@ -90,5 +94,9 @@
 
 #undef ULLONG_MAX
 #define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

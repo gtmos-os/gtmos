@@ -20,6 +20,10 @@
 #define __FSTD_HDRS_STDARG_H 1
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef __builtin_va_list va_list;
 
 #undef va_start
@@ -31,6 +35,10 @@ typedef __builtin_va_list va_list;
 #if (defined(__cplusplus) && (__cplusplus >= 201103L)) || (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))
 #  undef va_copy
 #  define va_copy(d, s) __builtin_va_copy(d, s)
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

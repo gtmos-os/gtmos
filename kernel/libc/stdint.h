@@ -20,6 +20,10 @@
 #define __FSTD_HDRS_STDINT_H 1
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef __UINT8_TYPE__
 typedef __UINT8_TYPE__ uint8_t;
 #endif
@@ -275,5 +279,9 @@ typedef __INTMAX_TYPE__ intmax_t;
 #define WINT_MAX __WINT_MAX__
 #undef WINT_MIN
 #define WINT_MIN (-WINT_MAX - 1)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

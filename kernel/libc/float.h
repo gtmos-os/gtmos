@@ -20,6 +20,10 @@
 #define __FSTD_HDRS_FLOAT_H 1
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #undef FLT_ROUNDS
 #define FLT_ROUNDS 1
 
@@ -115,5 +119,9 @@
 #define DBL_HAS_SUBNORM __DBL_HAS_DENORM__
 #undef LDBL_HAS_SUBNORM
 #define LDBL_HAS_SUBNORM __LDBL_HAS_DENORM__
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

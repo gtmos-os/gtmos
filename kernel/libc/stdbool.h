@@ -20,6 +20,10 @@
 #define __FSTD_HDRS_STDBOOL_H 1
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __cplusplus
 #  undef bool
 #  define bool _Bool
@@ -32,5 +36,9 @@
 
 #undef __bool_true_false_are_defined
 #define __bool_true_false_are_defined 1
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

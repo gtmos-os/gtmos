@@ -20,6 +20,10 @@
 #define __FSTD_HDRS_STDDEF_H 1
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef __SIZE_TYPE__ size_t;
 typedef __PTRDIFF_TYPE__ ptrdiff_t;
 
@@ -51,6 +55,10 @@ typedef decltype(nullptr) nullptr_t;
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 202000L)
 #  undef unreachable
 #  define unreachable() __builtin_unreachable()
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif
