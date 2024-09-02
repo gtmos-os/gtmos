@@ -55,8 +55,9 @@ override SHARED_FLAGS := \
 override KCPPFLAGS := \
     -I src \
     $(KCPPFLAGS) \
-    -isystem freestanding-headers \
-    -isystem freestanding-cxx-hdrs \
+    -I libc \
+    -I flanterm \
+    -I flanterm/backends \
     -MMD \
     -MP
 
@@ -186,7 +187,7 @@ endif
 override HEADER_DEPS := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.d) $(CXXFILES:.cpp:.cpp.d) $(ASFILES:.S:.S.d))
 
 # Ensure the dependencies have been obtained.
-override MISSING_DEPS := $(shell if ! test -d freestanding-headers || ! test -d freestanding-cxx-hdrs || ! test -d flanterm || ! test -f src/cc-runtime.c || ! test -f src/limine.h; then echo 1; fi)
+override MISSING_DEPS := $(shell if ! test -d flanterm || ! test -f src/cc-runtime.c || ! test -f src/limine.h; then echo 1; fi)
 ifeq ($(MISSING_DEPS),1)
     $(error Please run the ./get-deps script first)
 endif

@@ -1,0 +1,54 @@
+/*
+ * File originally sourced from <https://github.com/osdev0/freestanding-cxx-hdrs>
+ *
+ * Copyright 2017-2020 cxxshim Contributors
+ * Copyright (C) 2023 mintsuki and contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+#ifndef _CXXSHIM_SOURCE_LOCATION
+#define _CXXSHIM_SOURCE_LOCATION
+
+namespace std {
+
+struct source_location {
+	static source_location current(
+			const char *file = __builtin_FILE(),
+			const char *function = __builtin_FUNCTION(),
+			unsigned int line = __builtin_LINE(),
+// GCC 10 has all builtins except for __builtin_COLUMN.
+#if __has_builtin(__builtin_COLUMN)
+			unsigned int column = __builtin_COLUMN()) {
+#else
+			unsigned int column = 0) {
+#endif
+		source_location sl;
+		sl.file_ = file;
+		sl.function_ = function;
+		sl.line_ = line;
+		sl.column_ = column;
+		return sl;
+	}
+
+	source_location() = default;
+
+	auto file_name() { return file_; }
+	auto function_name() { return function_; }
+	auto line() { return line_; }
+	auto column() { return column_; }
+
+private:
+	const char *file_ = nullptr;
+	const char *function_ = nullptr;
+	unsigned int line_ = 0;
+	unsigned int column_ = 0;
+};
+
+}
+
+#endif

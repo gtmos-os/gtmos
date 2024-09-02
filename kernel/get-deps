@@ -56,16 +56,6 @@ download_by_hash() {
 
 if ! test -f version; then
     clone_repo_commit \
-        https://github.com/osdev0/freestanding-headers.git \
-        freestanding-headers \
-        dd3abd2d7147efc4170dff478d3b7730bed14147
-
-    clone_repo_commit \
-        https://github.com/osdev0/freestanding-cxx-hdrs.git \
-        freestanding-cxx-hdrs \
-        929abf547254ecea0a389bc69db1d86b004ad6b3
-
-    clone_repo_commit \
         https://github.com/mintsuki/flanterm.git \
         flanterm \
         ef07a10cc38b34aa003d17be97a9f3542e275069
