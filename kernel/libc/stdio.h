@@ -1,6 +1,10 @@
 #ifndef _STDIO_H
 #define _STDIO_H 1
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 #include <stdarg.h>
 #include <gtmos/hal/vfs.h>
@@ -20,5 +24,9 @@ void debugc(char c);
 void debugs(const char* str);
 void debugf(const char* fmt, ...);
 void debug_buffer(const char* msg, const void* buffer, uint32_t count);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
