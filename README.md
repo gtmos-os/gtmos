@@ -1,5 +1,11 @@
 # GT MOS
 
+## Gallery
+
+| Image | Date | Description |
+| ----- | ---- | ----------- |
+| ![](./docs/screenshots/Screenshot%202024-09-02%20195118.png) | 2nd September 2024 | Displaying text on screen *(bottom left)* and input via serial console *(top left)*. [*Commit 6a6b8fc*](https://github.com/gtmos-os/gtmos/commit/6a6b8fc984e46b3224df853a6a41b50c6e3ca93d) |
+
 ## How to use this?
 
 ### Dependencies
