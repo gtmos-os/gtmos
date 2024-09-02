@@ -170,22 +170,23 @@ override KLDFLAGS += \
     -gc-sections \
     -T linker-$(KARCH).ld
 
-# Use "find" to glob all *.c, *.cpp, *.S, and *.asm files in the tree and obtain the
-# object and header dependency file names.
-override CFILES := $(shell cd src && find -L * -type f -name '*.c' | LC_ALL=C sort)
-override CXXFILES := $(shell cd src && find -L * -type f -name '*.cpp' | LC_ALL=C sort)
-override ASFILES := $(shell cd src && find -L * -type f -name '*.S' | LC_ALL=C sort)
+# Collect all source files.
+override CFILES := $(shell find src flanterm -type f -name '*.c' | LC_ALL=C sort)
+override CXXFILES := $(shell find src -type f -name '*.cpp' | LC_ALL=C sort)
+override ASFILES := $(shell find src -type f -name '*.S' | LC_ALL=C sort)
 ifeq ($(KARCH),x86_64)
-override NASMFILES := $(shell cd src && find -L * -type f -name '*.asm' | LC_ALL=C sort)
+override NASMFILES := $(shell find src -type f -name '*.asm' | LC_ALL=C sort)
 endif
+
+# Create object files paths with correct directory structure.
 override OBJ := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.o) $(CXXFILES:.cpp=.cpp.o) $(ASFILES:.S=.S.o))
 ifeq ($(KARCH),x86_64)
 override OBJ += $(addprefix obj-$(KARCH)/,$(NASMFILES:.asm=.asm.o))
 endif
-override HEADER_DEPS := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.d) $(CXXFILES:.cpp=.cpp.d) $(ASFILES:.S=.S.d))
+override HEADER_DEPS := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.d) $(CXXFILES:.cpp:.cpp.d) $(ASFILES:.S:.S.d))
 
 # Ensure the dependencies have been obtained.
-override MISSING_DEPS := $(shell if ! test -d freestanding-headers || ! test -d freestanding-cxx-hdrs || ! test -f src/cc-runtime.c || ! test -f src/limine.h; then echo 1; fi)
+override MISSING_DEPS := $(shell if ! test -d freestanding-headers || ! test -d freestanding-cxx-hdrs || ! test -d flanterm || ! test -f src/cc-runtime.c || ! test -f src/limine.h; then echo 1; fi)
 ifeq ($(MISSING_DEPS),1)
     $(error Please run the ./get-deps script first)
 endif
@@ -202,24 +203,24 @@ bin-$(KARCH)/$(OUTPUT): GNUmakefile linker-$(KARCH).ld $(OBJ)
 # Include header dependencies.
 -include $(HEADER_DEPS)
 
-# Compilation rules for *.c files.
-obj-$(KARCH)/%.c.o: src/%.c GNUmakefile
+# Generic compilation rule for all C files.
+obj-$(KARCH)/%.c.o: %.c GNUmakefile
 	mkdir -p "$$(dirname $@)"
 	$(KCC) $(KCFLAGS) $(KCPPFLAGS) -c $< -o $@
 
-# Compilation rules for *.cpp files.
-obj-$(KARCH)/%.cpp.o: src/%.cpp GNUmakefile
+# Generic compilation rule for all C++ files.
+obj-$(KARCH)/%.cpp.o: %.cpp GNUmakefile
 	mkdir -p "$$(dirname $@)"
 	$(KCXX) $(KCXXFLAGS) $(KCPPFLAGS) -c $< -o $@
 
-# Compilation rules for *.S files.
-obj-$(KARCH)/%.S.o: src/%.S GNUmakefile
+# Generic compilation rule for all assembly files.
+obj-$(KARCH)/%.S.o: %.S GNUmakefile
 	mkdir -p "$$(dirname $@)"
 	$(KCC) $(KCFLAGS) $(KCPPFLAGS) -c $< -o $@
 
 ifeq ($(KARCH),x86_64)
-# Compilation rules for *.asm (nasm) files.
-obj-$(KARCH)/%.asm.o: src/%.asm GNUmakefile
+# Generic compilation rule for all NASM assembly files.
+obj-$(KARCH)/%.asm.o: %.asm GNUmakefile
 	mkdir -p "$$(dirname $@)"
 	nasm $(KNASMFLAGS) $< -o $@
 endif
@@ -232,7 +233,7 @@ clean:
 # Remove everything built and generated including downloaded dependencies.
 .PHONY: distclean
 distclean:
-	rm -rf bin-* obj-* freestanding-headers freestanding-cxx-hdrs src/cc-runtime.c src/limine.h
+	rm -rf bin-* obj-* freestanding-headers freestanding-cxx-hdrs flanterm src/cc-runtime.c src/limine.h
 
 # Install the final built executable to its final on-root location.
 .PHONY: install

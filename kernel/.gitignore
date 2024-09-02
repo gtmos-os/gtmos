@@ -1,5 +1,6 @@
 /freestanding-headers
 /freestanding-cxx-hdrs
+/flanterm
 /src/cc-runtime.c
 /src/limine.h
 /bin-*
