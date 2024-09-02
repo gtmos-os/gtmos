@@ -1,4 +1,4 @@
-#include "./vfs.hpp"
+#include <gtmos/kvfs.hpp>
 #include <gtmos/io.h>
 
 struct flanterm_context *ft_ctx = nullptr;

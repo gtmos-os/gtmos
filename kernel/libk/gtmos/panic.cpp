@@ -1,6 +1,6 @@
 #include <gtmos/panic.h>
 #include <gtmos/io.h>
-#include "../libc/vfs.hpp"
+#include <gtmos/kvfs.hpp>
 
 void panic(const char* data)
 {

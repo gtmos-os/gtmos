@@ -3,8 +3,8 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <gtmos/panic.h>
+#include <gtmos/kvfs.hpp>
 #include "./limine.h"
-#include "./libc/vfs.hpp"
 
 // Set the base revision to 2, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
