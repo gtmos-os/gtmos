@@ -1,4 +1,5 @@
 /freestanding-headers
+/freestanding-cxx-hdrs
 /src/cc-runtime.c
 /src/limine.h
 /bin-*

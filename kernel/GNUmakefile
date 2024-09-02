@@ -15,13 +15,19 @@ $(call USER_VARIABLE,KARCH,x86_64)
 # User controllable C compiler command.
 $(call USER_VARIABLE,KCC,clang)
 
+# User controllable C++ compiler command.
+$(call USER_VARIABLE,KCXX,clang++)
+
 # User controllable linker command.
 $(call USER_VARIABLE,KLD,ld.lld)
 
 # User controllable C flags.
 $(call USER_VARIABLE,KCFLAGS,-g -O2 -pipe)
 
-# User controllable C preprocessor flags. We set none by default.
+# User controllable C++ flags. We default to same as C flags.
+$(call USER_VARIABLE,KCXXFLAGS,$(KCFLAGS))
+
+# User controllable C/C++ preprocessor flags. We set none by default.
 $(call USER_VARIABLE,KCPPFLAGS,)
 
 ifeq ($(KARCH),x86_64)
@@ -32,11 +38,10 @@ endif
 # User controllable linker flags. We set none by default.
 $(call USER_VARIABLE,KLDFLAGS,)
 
-# Internal C flags that should not be changed by the user.
-override KCFLAGS += \
+# Internal flags shared by both C and C++ compilers.
+override SHARED_FLAGS := \
     -Wall \
     -Wextra \
-    -std=gnu11 \
     -nostdinc \
     -ffreestanding \
     -fno-stack-protector \
@@ -46,11 +51,12 @@ override KCFLAGS += \
     -ffunction-sections \
     -fdata-sections
 
-# Internal C preprocessor flags that should not be changed by the user.
+# Internal C/C++ preprocessor flags that should not be changed by the user.
 override KCPPFLAGS := \
     -I src \
     $(KCPPFLAGS) \
     -isystem freestanding-headers \
+    -isystem freestanding-cxx-hdrs \
     -MMD \
     -MP
 
@@ -66,7 +72,11 @@ ifeq ($(KARCH),x86_64)
         override KCC += \
             -target x86_64-unknown-none
     endif
-    override KCFLAGS += \
+    ifeq ($(KCXX),clang++)
+        override KCXX += \
+            -target x86_64-unknown-none
+    endif
+    override SHARED_FLAGS += \
         -m64 \
         -march=x86-64 \
         -mno-80387 \
@@ -84,7 +94,11 @@ else ifeq ($(KARCH),aarch64)
         override KCC += \
             -target aarch64-unknown-none
     endif
-    override KCFLAGS += \
+    ifeq ($(KCXX),clang++)
+        override KCXX += \
+            -target aarch64-unknown-none
+    endif
+    override SHARED_FLAGS += \
         -mgeneral-regs-only
     override KLDFLAGS += \
         -m aarch64elf
@@ -100,7 +114,18 @@ else ifeq ($(KARCH),riscv64)
         override KCFLAGS += \
             -march=rv64imac
     endif
-    override KCFLAGS += \
+    ifeq ($(KCXX),clang++)
+        override KCXX += \
+            -target riscv64-unknown-none
+    endif
+    ifeq ($(shell $(KCXX) --version | grep -i 'clang'),)
+        override KCXXFLAGS += \
+            -march=rv64imac_zicsr_zifencei
+    else
+        override KCXXFLAGS += \
+            -march=rv64imac
+    endif
+    override SHARED_FLAGS += \
         -mabi=lp64 \
         -mno-relax
     override KLDFLAGS += \
@@ -111,7 +136,11 @@ else ifeq ($(KARCH),loongarch64)
         override KCC += \
             -target loongarch64-unknown-none
     endif
-    override KCFLAGS += \
+    ifeq ($(KCXX),clang++)
+        override KCXX += \
+            -target loongarch64-unknown-none
+    endif
+    override SHARED_FLAGS += \
         -march=loongarch64 \
         -mabi=lp64s
     override KLDFLAGS += \
@@ -121,6 +150,18 @@ else
     $(error Architecture $(KARCH) not supported)
 endif
 
+# Internal C flags that should not be changed by the user.
+override KCFLAGS += \
+    -std=gnu11 \
+    $(SHARED_FLAGS)
+
+# Internal C++ flags that should not be changed by the user.
+override KCXXFLAGS += \
+    -std=gnu++20 \
+    -fno-rtti \
+    -fno-exceptions \
+    $(SHARED_FLAGS)
+
 # Internal linker flags that should not be changed by the user.
 override KLDFLAGS += \
     -nostdlib \
@@ -129,21 +170,22 @@ override KLDFLAGS += \
     -gc-sections \
     -T linker-$(KARCH).ld
 
-# Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
+# Use "find" to glob all *.c, *.cpp, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
 override CFILES := $(shell cd src && find -L * -type f -name '*.c' | LC_ALL=C sort)
+override CXXFILES := $(shell cd src && find -L * -type f -name '*.cpp' | LC_ALL=C sort)
 override ASFILES := $(shell cd src && find -L * -type f -name '*.S' | LC_ALL=C sort)
 ifeq ($(KARCH),x86_64)
 override NASMFILES := $(shell cd src && find -L * -type f -name '*.asm' | LC_ALL=C sort)
 endif
-override OBJ := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o))
+override OBJ := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.o) $(CXXFILES:.cpp=.cpp.o) $(ASFILES:.S=.S.o))
 ifeq ($(KARCH),x86_64)
 override OBJ += $(addprefix obj-$(KARCH)/,$(NASMFILES:.asm=.asm.o))
 endif
-override HEADER_DEPS := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
+override HEADER_DEPS := $(addprefix obj-$(KARCH)/,$(CFILES:.c=.c.d) $(CXXFILES:.cpp=.cpp.d) $(ASFILES:.S=.S.d))
 
 # Ensure the dependencies have been obtained.
-override MISSING_DEPS := $(shell if ! test -d freestanding-headers || ! test -f src/cc-runtime.c || ! test -f src/limine.h; then echo 1; fi)
+override MISSING_DEPS := $(shell if ! test -d freestanding-headers || ! test -d freestanding-cxx-hdrs || ! test -f src/cc-runtime.c || ! test -f src/limine.h; then echo 1; fi)
 ifeq ($(MISSING_DEPS),1)
     $(error Please run the ./get-deps script first)
 endif
@@ -165,6 +207,11 @@ obj-$(KARCH)/%.c.o: src/%.c GNUmakefile
 	mkdir -p "$$(dirname $@)"
 	$(KCC) $(KCFLAGS) $(KCPPFLAGS) -c $< -o $@
 
+# Compilation rules for *.cpp files.
+obj-$(KARCH)/%.cpp.o: src/%.cpp GNUmakefile
+	mkdir -p "$$(dirname $@)"
+	$(KCXX) $(KCXXFLAGS) $(KCPPFLAGS) -c $< -o $@
+
 # Compilation rules for *.S files.
 obj-$(KARCH)/%.S.o: src/%.S GNUmakefile
 	mkdir -p "$$(dirname $@)"
@@ -185,7 +232,7 @@ clean:
 # Remove everything built and generated including downloaded dependencies.
 .PHONY: distclean
 distclean:
-	rm -rf bin-* obj-* freestanding-headers src/cc-runtime.c src/limine.h
+	rm -rf bin-* obj-* freestanding-headers freestanding-cxx-hdrs src/cc-runtime.c src/limine.h
 
 # Install the final built executable to its final on-root location.
 .PHONY: install
