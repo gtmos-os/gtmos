@@ -172,11 +172,11 @@ override KLDFLAGS += \
     -T linker-$(KARCH).ld
 
 # Collect all source files.
-override CFILES := $(shell find src flanterm -type f -name '*.c' | LC_ALL=C sort)
-override CXXFILES := $(shell find src -type f -name '*.cpp' | LC_ALL=C sort)
-override ASFILES := $(shell find src -type f -name '*.S' | LC_ALL=C sort)
+override CFILES := $(shell find libc src flanterm -type f -name '*.c' | LC_ALL=C sort)
+override CXXFILES := $(shell find libc src -type f -name '*.cpp' | LC_ALL=C sort)
+override ASFILES := $(shell find libc src -type f -name '*.S' | LC_ALL=C sort)
 ifeq ($(KARCH),x86_64)
-override NASMFILES := $(shell find src -type f -name '*.asm' | LC_ALL=C sort)
+override NASMFILES := $(shell find libc src -type f -name '*.asm' | LC_ALL=C sort)
 endif
 
 # Create object files paths with correct directory structure.

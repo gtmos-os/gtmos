@@ -1,9 +1,9 @@
 #include <cstdint>
 #include <cstddef>
 #include <stddef.h>
-#include <limine.h>
-#include "../flanterm/backends/fb.h"
-#include "../flanterm/flanterm.h"
+#include <stdio.h>
+#include "./limine.h"
+#include "./libc/vfs.hpp"
 
 // Set the base revision to 2, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -140,7 +140,8 @@ extern void (*__init_array_end[])();
 // The following will be our kernel's entry point.
 // If renaming kmain() to something else, make sure to change the
 // linker script accordingly.
-extern "C" void kmain() {
+extern "C" void kmain()
+{
     // Ensure the bootloader actually understands our base revision (see spec).
     if (LIMINE_BASE_REVISION_SUPPORTED == false) {
         hcf();
@@ -184,9 +185,11 @@ extern "C" void kmain() {
         0
     );
 
+    VFS_SetDisplayContext(ft_ctx);
+
     const char msg[] = "Hello world\n";
 
-    flanterm_write(ft_ctx, msg, sizeof(msg));
+    printf(msg);
 
     // We're done, just hang...
     hcf();
