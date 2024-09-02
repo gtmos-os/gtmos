@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <gtmos/panic.h>
 #include <gtmos/kvfs.hpp>
+#include <gtmos/io.h>
 #include "./limine.h"
 
 // Set the base revision to 2, this is recommended as this is the latest
@@ -132,8 +133,17 @@ extern "C" void kmain()
 
     printf(msg, A);
     debugf(msg, A);
+    
+    while (1)
+    {
+        const char in = (const char) serial_port_read_byte();
+        printf("%c", in);
+        debugf("%c", in);
+    }
+    
+    
 
-    panic("TEST!");
+    // panic("TEST!");
 
     // We're done, just hang...
     hcf();
