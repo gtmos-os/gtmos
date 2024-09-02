@@ -15,7 +15,7 @@ typedef int fd_t;
 #define VFS_FD_STDERR   2
 #define VFS_FD_DEBUG    3
 
-int VFS_Write(fd_t file, uint8_t* data, size_t size);
+int VFS_Write(fd_t file, const char data, size_t size);
 
 #ifdef __cplusplus
 }

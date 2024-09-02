@@ -187,9 +187,10 @@ extern "C" void kmain()
 
     VFS_SetDisplayContext(ft_ctx);
 
-    const char msg[] = "Hello world\n";
+    const char msg[] = "Hello world, %i\n";
+    int A = 1;
 
-    printf(msg);
+    printf(msg, A);
 
     // We're done, just hang...
     hcf();
