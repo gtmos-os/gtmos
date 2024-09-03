@@ -4,7 +4,10 @@
 #include <stdio.h>
 #include <gtmos/kvfs.h>
 #include <gtmos/arch.h>
-#include <dev/efi.h>
+#include <dev/efi/efi.h>
+#include <dev/memory/memory.hpp>
+#include <dev/memory/allocator.hpp>
+#include <cstr.h>
 #include "./limine.h"
 
 // Set the base revision to 2, this is recommended as this is the latest
@@ -68,6 +71,9 @@ extern "C" {
 extern void (*__init_array[])();
 extern void (*__init_array_end[])();
 
+extern uint64_t _KernelStart;
+extern uint64_t _KernelEnd;
+
 // The following will be our kernel's entry point.
 // If renaming kmain() to something else, make sure to change the
 // linker script accordingly.
@@ -119,20 +125,29 @@ extern "C" void kmain()
     }
 
     uint64_t efi_mem_entries = efi_memmap_request.response->memmap_size / efi_memmap_request.response->desc_size;
+    uint64_t kernelSize = (uint64_t)&_KernelEnd - (uint64_t)&_KernelStart;
+    uint64_t kernelPages = (uint64_t)kernelSize / 4096 + 1;
+    debugf("A");
+    PageFrameAllocator newAllocator;
+    debugf("B");
+    newAllocator.ReadEFIMemoryMap(efi_memamp, efi_mem_entries, efi_memmap_request.response->desc_size);
+    debugf("C");
+    newAllocator.LockPages(&_KernelStart, kernelPages);
 
-    const char msg[] = "EFI mem entries: %i\n";
-   
-    printf(msg, efi_mem_entries);
-    debugf(msg, efi_mem_entries);
+    const char msg[] = "Free RAM %s KB\n";
 
-    for (uint64_t i = 0; i < efi_mem_entries; i ++)
-    {
-        EFI_MEMORY_DESCRIPTOR* desc = (EFI_MEMORY_DESCRIPTOR*)((uint64_t) efi_memamp + (i * efi_memmap_request.response->desc_size));
+    printf(msg, to_string(newAllocator.GetFreeRAM() / 1024));
+    debugf(msg, to_string(newAllocator.GetFreeRAM() / 1024));
 
-        const char desc_msg[] = "%s %d KB\n";
-        printf(desc_msg, EFI_MEMORY_TYPE_STRINGS[desc->type], desc->numPages * 4096 / 1024);
-        debugf(desc_msg, EFI_MEMORY_TYPE_STRINGS[desc->type], desc->numPages * 4096 / 1024);
-    }
+    const char msg1[] = "Used RAM %s KB\n";
+
+    printf(msg1, to_string(newAllocator.GetUsedRAM() / 1024));
+    debugf(msg1, to_string(newAllocator.GetUsedRAM() / 1024));
+
+    const char msg2[] = "Reserved  RAM %s KB\n";
+
+    printf(msg2, to_string(newAllocator.GetReservedRAM() / 1024));
+    debugf(msg2, to_string(newAllocator.GetReservedRAM() / 1024));
 
     // We're done, just hang...
     hcf();

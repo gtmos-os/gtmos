@@ -1,4 +1,4 @@
-#include <dev/efi.h>
+#include <dev/efi/efi.h>
 
 extern "C" {
     const char* EFI_MEMORY_TYPE_STRINGS[] {

@@ -1,6 +1,6 @@
 #include <gtmos/arch.h>
 #include <gtmos/kvfs.h>
-#include <dev/serial.h>
+#include <dev/serial/serial.h>
 #include <stddef.h>
 
 void serial_port_write_byte(uint8_t byte) {
