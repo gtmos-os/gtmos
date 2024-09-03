@@ -7,7 +7,10 @@ extern "C" {
 
 #include <stdint.h>
 
-#define SERIAL_PORT_COM1_BASE 0x3F8
+// Halt and catch fire function.
+void hcf();
+
+void panic(const char* data);
 
 uint8_t inb(uint16_t port);
 void outb(uint16_t port, uint8_t value);

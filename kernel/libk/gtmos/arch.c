@@ -1,8 +1,46 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <gtmos/io.h>
+#include <gtmos/arch.h>
+#include <gtmos/kvfs.h>
 
-uint8_t inb(uint16_t port) {
+void hcf()
+{
+    for (;;) {
+#if defined (__x86_64__)
+        asm ("hlt");
+#elif defined (__aarch64__) || defined (__riscv)
+        asm ("wfi");
+#elif defined (__loongarch64)
+        asm ("idle 0");
+#endif
+    }
+}
+
+void panic(const char* data)
+{
+    struct flanterm_context *ft_ctx = VFS_GetDisplayContext();
+    const char style[] = "\x1b[1;37;41m";
+    const char line1[] = "\n! KERNEL PANIC OCCURRED !\n";
+    const char reset[] = "\x1b[0;0m";
+
+    if (ft_ctx != NULL)
+    {
+        flanterm_write(ft_ctx, style, sizeof(style));
+        flanterm_write(ft_ctx, line1, sizeof(line1));
+        flanterm_write(ft_ctx, data, sizeof(data));
+        flanterm_write(ft_ctx, reset, sizeof(reset));
+    }
+
+    serial_port_write_string(style);
+    serial_port_write_string(line1);
+    serial_port_write_string(data);
+    serial_port_write_string(reset);
+
+    hcf();
+}
+
+uint8_t inb(uint16_t port)
+{
 #if defined(__x86_64__)
     uint8_t value;
     __asm__ __volatile__ ("inb %1, %0" : "=a"(value) : "Nd"(port));
@@ -24,7 +62,8 @@ uint8_t inb(uint16_t port) {
 #endif
 }
 
-void outb(uint16_t port, uint8_t value) {
+void outb(uint16_t port, uint8_t value)
+{
 #if defined(__x86_64__)
     __asm__ __volatile__ ("outb %0, %1" : : "a"(value), "Nd"(port));
 #elif defined(__aarch64__)
@@ -38,24 +77,3 @@ void outb(uint16_t port, uint8_t value) {
 #endif
 }
 
-void serial_port_write_byte(uint8_t byte) {
-    while ((inb(SERIAL_PORT_COM1_BASE + 5) & 0x20) == 0); // Wait for transmit buffer to be empty
-    outb(SERIAL_PORT_COM1_BASE, byte);
-}
-
-uint8_t serial_port_read_byte() {
-    while ((inb(SERIAL_PORT_COM1_BASE + 5) & 0x01) == 0); // Wait for receive buffer to be full
-    return inb(SERIAL_PORT_COM1_BASE);
-}
-
-void serial_port_write_string(const char* str)
-{
-    if (str == NULL) {
-        return; // Handle null pointer case
-    }
-    
-    while (*str) {
-        serial_port_write_byte((uint8_t)(*str)); // Send each character
-        str++; // Move to the next character
-    }
-}

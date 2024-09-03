@@ -2,9 +2,8 @@
 #include <cstddef>
 #include <stddef.h>
 #include <stdio.h>
-#include <gtmos/panic.h>
-#include <gtmos/kvfs.hpp>
-#include <gtmos/io.h>
+#include <gtmos/kvfs.h>
+#include <gtmos/arch.h>
 #include "./limine.h"
 
 // Set the base revision to 2, this is recommended as this is the latest
@@ -32,6 +31,13 @@ volatile limine_framebuffer_request framebuffer_request = {
     .response = nullptr
 };
 
+__attribute__((used, section(".requests")))
+volatile limine_efi_memmap_request efi_memmap_request = {
+    .id = LIMINE_EFI_MEMMAP_REQUEST,
+    .revision = 0,
+    .response = nullptr
+};
+
 }
 
 // Finally, define the start and end markers for the Limine requests.
@@ -44,23 +50,6 @@ volatile LIMINE_REQUESTS_START_MARKER;
 
 __attribute__((used, section(".requests_end_marker")))
 volatile LIMINE_REQUESTS_END_MARKER;
-
-}
-
-// Halt and catch fire function.
-namespace {
-
-void hcf() {
-    for (;;) {
-#if defined (__x86_64__)
-        asm ("hlt");
-#elif defined (__aarch64__) || defined (__riscv)
-        asm ("wfi");
-#elif defined (__loongarch64)
-        asm ("idle 0");
-#endif
-    }
-}
 
 }
 
@@ -104,12 +93,6 @@ extern "C" void kmain()
 
     std::uint32_t *fb_ptr = static_cast<std::uint32_t *>(framebuffer->address);
 
-    // // Note: we assume the framebuffer model is RGB with 32-bit pixels.
-    // for (std::size_t i = 0; i < 100; i++) {
-    //     volatile std::uint32_t *fb_ptr = static_cast<volatile std::uint32_t *>(framebuffer->address);
-    //     fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xffffff;
-    // }
-
     struct flanterm_context *ft_ctx = flanterm_fb_init(
         NULL,
         NULL,
@@ -128,23 +111,18 @@ extern "C" void kmain()
 
     VFS_SetDisplayContext(ft_ctx);
 
+    limine_efi_memmap_response *efi_memamp = efi_memmap_request.response;
+
+    if (efi_memamp == nullptr) {
+        panic("EFI Memory Map is null!");
+    }
+
     const char msg[] = "Hello world, %i\n";
     int A = 1;
 
     printf(msg, A);
     debugf(msg, A);
     
-    while (1)
-    {
-        const char in = (const char) serial_port_read_byte();
-        printf("%c", in);
-        debugf("%c", in);
-    }
-    
-    
-
-    // panic("TEST!");
-
     // We're done, just hang...
     hcf();
 }

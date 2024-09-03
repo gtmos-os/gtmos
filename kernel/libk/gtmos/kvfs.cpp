@@ -1,5 +1,5 @@
-#include <gtmos/kvfs.hpp>
-#include <gtmos/io.h>
+#include <gtmos/kvfs.h>
+#include <dev/serial.h>
 
 struct flanterm_context *ft_ctx = nullptr;
 
