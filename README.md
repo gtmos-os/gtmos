@@ -4,6 +4,7 @@
 
 | Image | Date | Description |
 | ----- | ---- | ----------- |
+| ![](./docs/screenshots/Screenshot%202024-09-03%20133058.png) | 3rd September 2024 | Loading the EFI memory map. [*Commit a949eab*](https://github.com/gtmos-os/gtmos/commit/a949eab842dbdbb851c47133f1258933d3e23484) |
 | ![](./docs/screenshots/Screenshot%202024-09-02%20195118.png) | 2nd September 2024 | Displaying text on screen *(bottom left)* and input via serial console *(top left)*. [*Commit 6a6b8fc*](https://github.com/gtmos-os/gtmos/commit/6a6b8fc984e46b3224df853a6a41b50c6e3ca93d) |
 
 ## How to use this?
