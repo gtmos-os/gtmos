@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <gtmos/kvfs.h>
 #include <gtmos/arch.h>
+#include <dev/efi.h>
 #include "./limine.h"
 
 // Set the base revision to 2, this is recommended as this is the latest
@@ -111,18 +112,28 @@ extern "C" void kmain()
 
     VFS_SetDisplayContext(ft_ctx);
 
-    limine_efi_memmap_response *efi_memamp = efi_memmap_request.response;
+    void *efi_memamp = efi_memmap_request.response->memmap;
 
     if (efi_memamp == nullptr) {
         panic("EFI Memory Map is null!");
     }
 
-    const char msg[] = "Hello world, %i\n";
-    int A = 1;
+    uint64_t efi_mem_entries = efi_memmap_request.response->memmap_size / efi_memmap_request.response->desc_size;
 
-    printf(msg, A);
-    debugf(msg, A);
-    
+    const char msg[] = "EFI mem entries: %i\n";
+   
+    printf(msg, efi_mem_entries);
+    debugf(msg, efi_mem_entries);
+
+    for (uint64_t i = 0; i < efi_mem_entries; i ++)
+    {
+        EFI_MEMORY_DESCRIPTOR* desc = (EFI_MEMORY_DESCRIPTOR*)((uint64_t) efi_memamp + (i * efi_memmap_request.response->desc_size));
+
+        const char desc_msg[] = "%s %d KB\n";
+        printf(desc_msg, EFI_MEMORY_TYPE_STRINGS[desc->type], desc->numPages * 4096 / 1024);
+        debugf(desc_msg, EFI_MEMORY_TYPE_STRINGS[desc->type], desc->numPages * 4096 / 1024);
+    }
+
     // We're done, just hang...
     hcf();
 }
