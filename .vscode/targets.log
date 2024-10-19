@@ -1,214 +1,151 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # GNU Make 4.3
-# Built for x86_64-redhat-linux-gnu
+# Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Sep 24 15:32:25 2022
+# Make data base, printed on Sat Oct 19 12:04:58 2024
 
 # Variables
 
 # environment
-GDK_BACKEND = x11
-# environment
 LC_ALL = C
 # environment
-NO_AT_BRIDGE = 1
+PULSE_SERVER = unix:/mnt/wslg/PulseServer
 # environment
-HOMEBREW_PREFIX = /home/linuxbrew/.linuxbrew
+define WSLENV
+ELECTRON_RUN_AS_NODE/w:WT_SESSION:WT_PROFILE_ID:
+
+endef
 # environment
-GJS_DEBUG_OUTPUT = stderr
-# environment
-VSCODE_CWD = /home/bahamin
-# environment
-WINDOWPATH = 2
-# environment
-GDM_LANG = en_US.UTF-8
+VSCODE_CWD = /mnt/c/Users/samro/AppData/Local/Programs/Microsoft VS Code
 # default
 MAKE_COMMAND := make
 # environment
-define BASH_FUNC_which%%
-() {  ( alias;
- eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
-}
-endef
+VSCODE_HANDLES_SIGPIPE = true
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
 .VARIABLES := 
- 
 # environment
-PWD = /home/bahamin/Documents/GitHub/BAS-kernel
+PWD = /mnt/d/SHARES/Archives/other/osdev/BAS-kernel
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-HOSTNAME = dhcppc1
-# environment
-MAIL = /var/spool/mail/bahamin
-# environment
-XDG_DATA_DIRS = /home/bahamin/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+XDG_DATA_DIRS = /usr/local/share:/usr/share:/var/lib/snapd/desktop
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/bahamin/.config/Code/CachedData/74b1f979648cc44d385a2286793c226e611f59e7
-# environment
 LANG = C
-# environment
-GUESTFISH_OUTPUT = \e[0m
-# environment
-XAUTHORITY = /run/user/1000/gdm/Xauthority
 # default
 .LOADED := 
-# environment
-HOMEBREW_REPOSITORY = /home/linuxbrew/.linuxbrew/Homebrew
 # default
-.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
-# environment
-GUESTFISH_INIT = \e[1;34m
+.INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
 # makefile
 MAKEFLAGS = pqrR
 # makefile
-CURDIR := /home/bahamin/Documents/GitHub/BAS-kernel
+CURDIR := /mnt/d/SHARES/Archives/other/osdev/BAS-kernel
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+LESSOPEN = | /usr/bin/lesspipe %s
 # environment
-LESSOPEN = ||/usr/bin/lesspipe.sh %s
+VSCODE_L10N_BUNDLE_LOCATION = 
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
 MFLAGS = -pqrR
-# environment
-SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # default
 .SHELLFLAGS := -c
 # environment
-HISTSIZE = 1000
+ 
+WSL2_GUI_APPS_ENABLED = 1
+# environment
+WAYLAND_DISPLAY = wayland-0
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
-# environment
-XDG_SESSION_DESKTOP = gnome-xorg
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
-# environment
-VSCODE_PID = 2974
-# environment
-XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/2006,unix/unix:/tmp/.ICE-unix/2006
+WT_PROFILE_ID = {d8e96812-b789-5068-a5ae-10b2fb53e95f}
 # automatic
 *F = $(notdir $*)
 # environment
-MANPATH = /home/linuxbrew/.linuxbrew/share/man:
-# environment
-CHROME_DESKTOP = code-url-handler.desktop
-# environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1002/bus
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # environment
-VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"userLocale":"en","osLocale":"en","resolvedLanguage":"en","defaultMessagesFile":"/home/samro/.vscode-server/bin/384ff7382de624fb94dbaf6da11977bba1ecd427/out/nls.messages.json","locale":"en","availableLanguages":{}}
 # default
-MAKE_HOST := x86_64-redhat-linux-gnu
-# environment
-INFOPATH = /home/linuxbrew/.linuxbrew/share/info:
+MAKE_HOST := x86_64-pc-linux-gnu
 # makefile
 SHELL = /bin/sh
 # default
 MAKECMDGOALS := all
 # environment
-XMODIFIERS = @im=ibus
-# environment
-GJS_DEBUG_TOPICS = JS ERROR;JS LOG
-# environment
-SHLVL = 0
+SHLVL = 1
 # environment
 MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/home/bahamin/.local/bin:/home/bahamin/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/var/lib/snapd/snap/bin
-# environment
-MOZ_GMP_PATH = /usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed
+PATH = /home/samro/.vscode-server/bin/384ff7382de624fb94dbaf6da11977bba1ecd427/bin/remote-cli:/home/samro/.local/bin:/home/samro/.local/bin:/home/samro/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/d/Program Files/Git/cmd:/mnt/d/Program Files/kubectl:/mnt/c/Program Files/qemu:/mnt/d/jdks/jdk-21.0.2/bin:/mnt/c/Program Files/Microsoft/Web Platform Installer/:/mnt/c/Users/samro/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/samro/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin
 # default
 MAKEFILES := 
 # automatic
 ^F = $(notdir $^)
 # environment
-INVOCATION_ID = 205029ceb5b9477f9bc9dcee8edd6ec9
+WT_SESSION = 58a999d0-f72d-4501-91ac-f870d266c09a
 # environment
-USERNAME = bahamin
+LESSCLOSE = /usr/bin/lesspipe %s %s
 # automatic
 ?F = $(notdir $?)
 # environment
-GUESTFISH_PS1 = \[\e[1;32m\]><fs>\[\e[0;31m\] 
+NAME = Code
 # environment
-XDG_CURRENT_DESKTOP = GNOME
+HOSTTYPE = x86_64
+# environment
+LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:
 # automatic
 +F = $(notdir $+)
 # environment
-DESKTOP_SESSION = gnome-xorg
-# environment
-ORIGINAL_XDG_CURRENT_DESKTOP = GNOME
+WSL_INTEROP = /run/WSL/4846_interop
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
-LOGNAME = bahamin
+LOGNAME = samro
 # environment
-GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
+VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/samro/.vscode/extensions/ms-vscode-remote.remote-wsl-0.88.4
 # makefile
 .DEFAULT_GOAL := all
 # environment
-SYSTEMD_EXEC_PID = 2062
-# environment
-HISTCONTROL = ignoredups
-# environment
-EDITOR = /usr/bin/nano
-# environment
 DISPLAY = :0
 # environment
-USER = bahamin
+USER = samro
 # default
 MAKE_VERSION := 4.3
 # environment
-MANAGERPID = 1754
+_ = /mnt/c/Users/samro/AppData/Local/Programs/Microsoft VS Code/bin/code
 # environment
-which_declare = declare -f
+XDG_RUNTIME_DIR = /run/user/1002/
 # environment
-HOMEBREW_CELLAR = /home/linuxbrew/.linuxbrew/Cellar
-# environment
-DEBUGINFOD_URLS = https://debuginfod.fedoraproject.org/ 
-# environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 2974
-# environment
-SSH_AGENT_PID = 1936
-# environment
-_ = /usr/bin/make
-# environment
-XDG_RUNTIME_DIR = /run/user/1000
-# environment
-JOURNAL_STREAM = 8:32188
-# environment
-XDG_SESSION_CLASS = user
+VSCODE_IPC_HOOK_CLI = /run/user/1002/vscode-ipc-245d4d6f-7346-42e5-8493-601ebe3255d1.sock
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
-HOME = /home/bahamin
-# environment
-QT_IM_MODULE = ibus
+HOME = /home/samro
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-29e77879-1.71.2-main.sock
+TERM = xterm-256color
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -216,15 +153,11 @@ VSCODE_IPC_HOOK = /run/user/1000/vscode-29e77879-1.71.2-main.sock
 # default
 SUFFIXES := 
 # environment
-GUESTFISH_RESTORE = \e[0m
+WSL_DISTRO_NAME = Ubuntu-24.04
 # default
-.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
-# environment
-XDG_MENU_PREFIX = gnome-
-# environment
-GDMSESSION = gnome-xorg
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # variable set hash-table stats:
-# Load=104/1024=10%, Rehash=0, Collisions=9/137=7%
+# Load=71/1024=7%, Rehash=0, Collisions=2/104=2%
 
 # Pattern-specific Variable Values
 
@@ -232,9 +165,9 @@ GDMSESSION = gnome-xorg
 
 # Directories
 
-# . (device 2057, inode 3809109): 13 files, no impossibilities.
+# . (device 84, inode 5348024557896939): 14 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 14 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -245,7 +178,7 @@ GDMSESSION = gnome-xorg
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-09-17 13:41:05.111185
+#  Last modified 2024-10-19 11:41:24.4205981
 #  File has been updated.
 #  Successfully updated.
 
@@ -305,13 +238,12 @@ run:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 19 / storage = 165 B / avg = 8 B
-# current buf: size = 8162 B / used = 165 B / count = 19 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 20 / storage = 187 B / avg = 9 B
+# current buf: size = 8162 B / used = 187 B / count = 20 / avg = 9 B
 
-# strcache performance: lookups = 27 / hit rate = 29%
+# strcache performance: lookups = 28 / hit rate = 28%
 # hash-table stats:
- 
-# Load=19/8192=0%, Rehash=0, Collisions=0/27=0%
-# Finished Make data base on Sat Sep 24 15:32:25 2022
+# Load=20/8192=0%, Rehash=0, Collisions=0/28=0%
+# Finished Make data base on Sat Oct 19 12:04:58 2024
 
  
